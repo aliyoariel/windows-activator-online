@@ -19,9 +19,7 @@ cls
 mode con cols=98 lines=25
 for /f "tokens=2 delims==" %%a IN ('"wmic Path Win32_OperatingSystem Get Caption /format:LIST"') do (set NameOS=%%a) >nul 2>&1
 for /f "tokens=2 delims==" %%a IN ('"wmic Path Win32_OperatingSystem Get CSDVersion /format:LIST"') do (set SP=%%a) >nul 2>&1
-for /f "tokens=2 delims==" %%a IN ('"wmic path Win32_OperatingSystem Get BuildNumber /value"') do (set WinBuild=%%a) >nul 2>&1
-for /f "tokens=2 delims==" %%a IN ('"wmic os get OSArchitecture /value"') do (set OSArch=%%a) >nul 2>&1
-
+for /f "tokens=2 delims==" %%a in ('"wmic path Win32_OperatingSystem Get BuildNumber /value"') do (set WinBuild=%%a) >nul 2>&1
 echo.                     _________________________________________________________
 echo.                                        
 echo                       %NameOS% %SP% %WinBuild%
@@ -156,8 +154,6 @@ find /i "Office" %temp%\sppchk.txt 1>nul && (set office=1) || (set office=0)
 find /i "Office 15" %temp%\sppchk.txt 1>nul && (if %loc_off15% equ 0 exit /b)
 find /i "Office 16" %temp%\sppchk.txt 1>nul && (if %loc_off16% equ 0 exit /b)
 find /i "Office 19" %temp%\sppchk.txt 1>nul && (if %loc_off16% equ 0 exit /b)
-find /i "Office 2021" %temp%\osppchk.txt 1>nul && (if %loc_off16% equ 0 exit /b)
-find /i "Office 2024" %temp%\osppchk.txt 1>nul && (if %loc_off16% equ 0 exit /b)
 if %office% equ 0 wmic path %spp% where ID='%app%' get LicenseStatus | findstr "1" >nul 2>&1 && (echo.&call :activate %app%&exit /b)
 wmic path %spp% where (PartialProductKey is not NULL) get ID | findstr /i "%app%" >nul 2>&1 && (echo.&call :activate %app%&exit /b)
 if %office% equ 1 (call :offchk15&exit /b) else (if %gvlk% equ 1 exit /b)
@@ -210,8 +206,6 @@ find /i "Office 14" %temp%\osppchk.txt 1>nul && (set off14=1&if %loc_off14% equ 
 find /i "Office 15" %temp%\osppchk.txt 1>nul && (if %loc_off15% equ 0 exit /b)
 find /i "Office 16" %temp%\osppchk.txt 1>nul && (if %loc_off16% equ 0 exit /b)
 find /i "Office 19" %temp%\osppchk.txt 1>nul && (if %loc_off16% equ 0 exit /b)
-find /i "Office 2021" %temp%\osppchk.txt 1>nul && (if %loc_off16% equ 0 exit /b)
-find /i "Office 2024" %temp%\osppchk.txt 1>nul && (if %loc_off16% equ 0 exit /b)
 set office=0
 wmic path %spp% where ID='%app%' get LicenseStatus | findstr "1" >nul 2>&1 && (echo.&call :activate %app%&exit /b)
 wmic path %spp% where (PartialProductKey is not NULL) get ID | findstr /i "%app%" >nul 2>&1 && (echo.&call :activate %app%&exit /b)
@@ -406,7 +400,6 @@ exit /b
 set "ka=echo keys.Add"
 (echo edition = "%1"
 echo Set keys = CreateObject ^("Scripting.Dictionary"^)
-:: Windows ==================================================================
 echo.
 echo 'Windows 10
 %ka% "58e97c99-f377-4ef1-81d5-4ad5522b5fd8", "TX9XD-98N7V-6WMQ6-BX7FG-H8Q99" 'Home
@@ -435,6 +428,25 @@ echo 'Windows 10
 %ka% "ec868e65-fadf-4759-b23e-93fe37f2cc29", "CPWHC-NT2C7-VYW78-DHDB2-PG3GK" 'Enterprise Remote Sessions
 %ka% "0df4f814-3f57-4b8b-9a9d-fddadcd69fac", "NBTWJ-3DR69-3C4V8-C26MC-GQ9M6" 'Lean
 echo.
+echo 'Windows Server 2019
+%ka% "de32eafd-aaee-4662-9444-c1befb41bde2", "N69G4-B89J2-4G8F4-WWYCC-J464C" 'Standard
+%ka% "34e1ae55-27f8-4950-8877-7a03be5fb181", "WMDGN-G9PQG-XVVXX-R3X43-63DFG" 'Datacenter
+%ka% "034d3cbb-5d4b-4245-b3f8-f84571314078", "WVDHN-86M7X-466P6-VHXV7-YY726" 'Essentials
+%ka% "a99cc1f0-7719-4306-9645-294102fbff95", "FDNH6-VW9RW-BXPJ7-4XTYG-239TB" 'Azure Core
+%ka% "73e3957c-fc0c-400d-9184-5f7b6f2eb409", "N2KJX-J94YW-TQVFB-DG9YT-724CC" 'Standard ACor
+%ka% "90c362e5-0da1-4bfd-b53b-b87d309ade43", "6NMRW-2C8FM-D24W7-TQWMY-CWH2D" 'Datacenter ACor
+%ka% "8de8eb62-bbe0-40ac-ac17-f75595071ea3", "GRFBW-QNDC4-6QBHG-CCK3B-2PR88" 'ServerARM64
+echo.
+echo 'Windows Server 2016
+%ka% "8c1c5410-9f39-4805-8c9d-63a07706358f", "WC2BQ-8NRM3-FDDYY-2BFGV-KHKQY" 'Standard
+%ka% "21c56779-b449-4d20-adfc-eece0e1ad74b", "CB7KF-BWN84-R7R2Y-793K2-8XDDG" 'Datacenter
+%ka% "2b5a1b0f-a5ab-4c54-ac2f-a6d94824a283", "JCKRF-N37P4-C2D82-9YXRT-4M63B" 'Essentials
+%ka% "7b4433f4-b1e7-4788-895a-c45378d38253", "QN4C6-GBJD2-FB422-GHWJK-GJG2R" 'Cloud Storage
+%ka% "3dbf341b-5f6c-4fa7-b936-699dce9e263f", "VP34G-4NPPG-79JTQ-864T4-R3MQX" 'Azure Core
+%ka% "61c5ef22-f14f-4553-a824-c4b31e84b100", "PTXN8-JFHJM-4WC78-MPCBR-9W4KR" 'Standard ACor
+%ka% "e49c08e7-da82-42f8-bde2-b570fbcae76c", "2HXDN-KRXHB-GPYC7-YCKFJ-7FVDG" 'Datacenter ACor
+%ka% "43d9af6e-5e86-4be8-a797-d072a046896c", "K9FYF-G6NCK-73M32-XMVPY-F9DRR" 'ServerARM64
+echo.
 echo 'Windows 8.1
 %ka% "fe1c3238-432a-43a1-8e25-97e7d1ef10f3", "M9Q9P-WNJJT-6PXPY-DWX8H-6XWKK" 'Core
 %ka% "78558a64-dc19-43fe-a0d0-8075b2a370a3", "7B9N3-D94CG-YTVHR-QBPX3-RJP64" 'Core N
@@ -456,6 +468,12 @@ echo 'Windows 8.1
 %ka% "e58d87b5-8126-4580-80fb-861b22f79296", "MX3RK-9HNGX-K3QKC-6PJ3F-W8D7B" 'Pro for Students
 %ka% "cab491c7-a918-4f60-b502-dab75e334f40", "TNFGH-2R6PB-8XM3K-QYHX2-J4296" 'Pro for Students N
 echo.
+echo 'Windows Server 2012 R2
+%ka% "b3ca044e-a358-4d68-9883-aaa2941aca99", "D2N9P-3P6X9-2R39C-7RTCD-MDVJX" 'Standard
+%ka% "00091344-1ea4-4f37-b789-01750ba6988c", "W3GGN-FT8W3-Y4M27-J84CP-Q3VJ9" 'Datacenter
+%ka% "21db6ba4-9a7b-4a14-9e29-64a60c59301d", "KNC87-3J2TX-XB4WP-VCPJV-M4FWM" 'Essentials
+%ka% "b743a2be-68d4-4dd3-af32-92425b7bb623", "3NPTF-33KPT-GGBPR-YX76B-39KDD" 'Cloud Storage
+echo.
 echo 'Windows 8
 %ka% "c04ed6bf-55c8-4b47-9f8e-5a1f31ceee60", "BN3D2-R7TKB-3YPBD-8DRP2-27GG4" 'Core
 %ka% "197390a0-65f6-4a95-bdc4-55d58a3b0253", "8N2M2-HWPGY-7PGT9-HGDD8-GVGGY" 'Core N
@@ -470,6 +488,12 @@ echo 'Windows 8
 %ka% "10018baf-ce21-4060-80bd-47fe74ed4dab", "RYXVT-BNQG7-VD29F-DBMRY-HT73M" 'Embedded Industry Pro
 %ka% "18db1848-12e0-4167-b9d7-da7fcda507db", "NKB3R-R2F8T-3XCDP-7Q2KW-XWYQ2" 'Embedded Industry Enterprise
 echo.
+echo 'Windows Server 2012
+%ka% "f0f5ec41-0d55-4732-af02-440a44a3cf0f", "XC9B7-NBPP2-83J2H-RHMBY-92BT4" 'Standard
+%ka% "d3643d60-0c42-412d-a7d6-52e6635327f6", "48HP8-DN98B-MYWDG-T2DCC-8W83P" 'Datacenter
+%ka% "7d5486c7-e120-4771-b7f1-7b56c6d3170c", "HM7DN-YVMH3-46JC3-XYTG7-CYQJJ" 'MultiPoint Standard
+%ka% "95fd1c83-7df5-494a-be8b-1300e1c9d1cd", "XNH6W-2V9GX-RGJ4K-Y8X6F-QGJ2G" 'MultiPoint Premium
+echo.
 echo 'Windows 7
 %ka% "b92e9980-b9d5-4821-9c94-140f632f6312", "FJ82H-XT6CR-J8D7P-XQJJ2-GPDD4" 'Professional
 %ka% "54a09a0d-d57b-4c10-8b69-a842d6590ad5", "MRPKT-YTG23-K7D7T-X2JMM-QY7MG" 'Professional N
@@ -480,37 +504,6 @@ echo 'Windows 7
 %ka% "db537896-376f-48ae-a492-53d0547773d0", "YBYF6-BHCR3-JPKRB-CDW7B-F9BK4" 'Embedded POSReady 7
 %ka% "e1a8296a-db37-44d1-8cce-7bc961d59c54", "XGY72-BRBBT-FF8MH-2GG8H-W7KCW" 'Embedded Standard
 %ka% "aa6dd3aa-c2b4-40e2-a544-a6bbb3f5c395", "73KQT-CD9G6-K7TQG-66MRP-CQ22C" 'Embedded ThinPC
-:: Windows Server ==================================================================
-echo.
-echo 'Windows Server 2019
-%ka% "de32eafd-aaee-4662-9444-c1befb41bde2", "N69G4-B89J2-4G8F4-WWYCC-J464C" 'Standard
-%ka% "34e1ae55-27f8-4950-8877-7a03be5fb181", "WMDGN-G9PQG-XVVXX-R3X43-63DFG" 'Datacenter
-%ka% "034d3cbb-5d4b-4245-b3f8-f84571314078", "WVDHN-86M7X-466P6-VHXV7-YY726" 'Essentials
-%ka% "a99cc1f0-7719-4306-9645-294102fbff95", "FDNH6-VW9RW-BXPJ7-4XTYG-239TB" 'Azure Core
-%ka% "73e3957c-fc0c-400d-9184-5f7b6f2eb409", "N2KJX-J94YW-TQVFB-DG9YT-724CC" 'Standard ACor
-%ka% "90c362e5-0da1-4bfd-b53b-b87d309ade43", "6NMRW-2C8FM-D24W7-TQWMY-CWH2D" 'Datacenter ACor
-%ka% "8de8eb62-bbe0-40ac-ac17-f75595071ea3", "GRFBW-QNDC4-6QBHG-CCK3B-2PR88" 'ServerARM64
-echo.
-echo 'Windows Server 2016
-%ka% "8c1c5410-9f39-4805-8c9d-63a07706358f", "WC2BQ-8NRM3-FDDYY-2BFGV-KHKQY" 'Standard
-%ka% "21c56779-b449-4d20-adfc-eece0e1ad74b", "CB7KF-BWN84-R7R2Y-793K2-8XDDG" 'Datacenter
-%ka% "2b5a1b0f-a5ab-4c54-ac2f-a6d94824a283", "JCKRF-N37P4-C2D82-9YXRT-4M63B" 'Essentials
-%ka% "7b4433f4-b1e7-4788-895a-c45378d38253", "QN4C6-GBJD2-FB422-GHWJK-GJG2R" 'Cloud Storage
-%ka% "3dbf341b-5f6c-4fa7-b936-699dce9e263f", "VP34G-4NPPG-79JTQ-864T4-R3MQX" 'Azure Core
-%ka% "61c5ef22-f14f-4553-a824-c4b31e84b100", "PTXN8-JFHJM-4WC78-MPCBR-9W4KR" 'Standard ACor
-%ka% "e49c08e7-da82-42f8-bde2-b570fbcae76c", "2HXDN-KRXHB-GPYC7-YCKFJ-7FVDG" 'Datacenter ACor
-%ka% "43d9af6e-5e86-4be8-a797-d072a046896c", "K9FYF-G6NCK-73M32-XMVPY-F9DRR" 'ServerARM64
-echo.
-echo 'Windows Server 2012 R2
-%ka% "b3ca044e-a358-4d68-9883-aaa2941aca99", "D2N9P-3P6X9-2R39C-7RTCD-MDVJX" 'Standard
-%ka% "00091344-1ea4-4f37-b789-01750ba6988c", "W3GGN-FT8W3-Y4M27-J84CP-Q3VJ9" 'Datacenter
-%ka% "21db6ba4-9a7b-4a14-9e29-64a60c59301d", "KNC87-3J2TX-XB4WP-VCPJV-M4FWM" 'Essentials
-%ka% "b743a2be-68d4-4dd3-af32-92425b7bb623", "3NPTF-33KPT-GGBPR-YX76B-39KDD" 'Cloud Storage
-echo 'Windows Server 2012
-%ka% "f0f5ec41-0d55-4732-af02-440a44a3cf0f", "XC9B7-NBPP2-83J2H-RHMBY-92BT4" 'Standard
-%ka% "d3643d60-0c42-412d-a7d6-52e6635327f6", "48HP8-DN98B-MYWDG-T2DCC-8W83P" 'Datacenter
-%ka% "7d5486c7-e120-4771-b7f1-7b56c6d3170c", "HM7DN-YVMH3-46JC3-XYTG7-CYQJJ" 'MultiPoint Standard
-%ka% "95fd1c83-7df5-494a-be8b-1300e1c9d1cd", "XNH6W-2V9GX-RGJ4K-Y8X6F-QGJ2G" 'MultiPoint Premium
 echo.
 echo 'Windows Server 2008 R2
 %ka% "a78b8bd9-8017-4df5-b86a-09f756affa7c", "6TPJF-RBVHG-WBW2R-86QPH-6RTM4" 'Web
@@ -520,39 +513,7 @@ echo 'Windows Server 2008 R2
 %ka% "620e2b3d-09e7-42fd-802a-17a13652fe7a", "489J6-VHDMP-X63PK-3K798-CPX3Y" 'Enterprise
 %ka% "8a26851c-1c7e-48d3-a687-fbca9b9ac16b", "GT63C-RJFQ3-4GMB6-BRFB9-CB83V" 'Itanium
 %ka% "f772515c-0e87-48d5-a676-e6962c3e1195", "736RG-XDKJK-V34PF-BHK87-J6X3K" 'MultiPoint Server
-:: Office ==================================================================
 echo.
-echo 'Office 2024
-%ka% "fceda083-1203-402a-8ec4-3d7ed9f3648c", "2TDPW-NDQ7G-FMG99-DXQ7M-TX3T2" 'Professional Plus
-%ka% "aaea0dc8-78e1-4343-9f25-b69b83dd1bce", "D9GTG-NP7DV-T6JP3-B6B62-JB89R" 'Project Professional
-%ka% "4ab4d849-aabc-43fb-87ee-3aed02518891", "YW66X-NH62M-G6YFP-B7KCT-WXGKQ" 'Visio Professional
-%ka% "72e9faa7-ead1-4f3d-9f6e-3abc090a81d7", "82FTR-NCHR7-W3944-MGRHM-JMCWD" 'Access
-%ka% "cbbba2c3-0ff5-4558-846a-043ef9d78559", "F4DYN-89BP2-WQTWJ-GR8YC-CKGJG" 'Excel
-%ka% "bef3152a-8a04-40f2-a065-340c3f23516d", "D2F8D-N3Q3B-J28PV-X27HD-RJWB9" 'Outlook
-%ka% "b63626a4-5f05-4ced-9639-31ba730a127e", "CW94N-K6GJH-9CTXY-MG2VC-FYCWP" 'PowerPoint
-%ka% "f510af75-8ab7-4426-a236-1bfb95c34ff8", "NBBBB-BBBBB-BBBBB-BBBH4-GX3R4" 'Project Professional
-%ka% "9f144f27-2ac5-40b9-899d-898c2b8b4f81", "PD3TT-NTHQQ-VC7CY-MFXK3-G87F8" 'Project Standard
-%ka% "8d368fc1-9470-4be2-8d66-90e836cbb051", "NBBBB-BBBBB-BBBBB-BBBJD-VXRPM" 'Professional Plus
-%ka% "0002290a-2091-4324-9e53-3cfe28884cde", "4NKHF-9HBQF-Q3B6C-7YV34-F64P3" 'Skype for Business
-%ka% "bbac904f-6a7e-418a-bb4b-24c85da06187", "V28N4-JG22K-W66P8-VTMGK-H6HGR" 'Standard
-%ka% "fa187091-8246-47b1-964f-80a0b1e5d69a", "NBBBB-BBBBB-BBBBB-BBBCW-6MX6T" 'Visio Professional
-%ka% "923fa470-aa71-4b8b-b35c-36b79bf9f44b", "JMMVY-XFNQC-KK4HK-9H7R3-WQQTV" 'Visio Standard
-%ka% "d0eded01-0881-4b37-9738-190400095098", "MQ84N-7VYDM-FXV7C-6K7CC-VFW9J" 'Word
-echo.
-echo 'Office 2021
-%ka% "1fe429d8-3fa7-4a39-b6f0-03dded42fe14", "WM8YG-YNGDD-4JHDC-PG3F4-FC4T4" 'Access
-%ka% "ea71effc-69f1-4925-9991-2f5e319bbc24", "NWG3X-87C9K-TC7YY-BC2G7-G6RVC" 'Excel
-%ka% "a5799e4c-f83c-4c6e-9516-dfe9b696150b", "C9FM6-3N72F-HFJXB-TM3V9-T86R9" 'Outlook
-%ka% "6e166cc3-495d-438a-89e7-d7c9e6fd4dea", "TY7XF-NFRBR-KJ44C-G83KF-GX27K" 'PowerPoint
-%ka% "76881159-155c-43e0-9db7-2d70a9a3a4ca", "FTNWT-C6WBT-8HMGF-K9PRX-QV9H8" 'Project Professional
-%ka% "6dd72704-f752-4b71-94c7-11cec6bfc355", "J2JDC-NJCYY-9RGQ4-YXWMH-T3D4T" 'Project Standard
-%ka% "fbdb3e18-a8ef-4fb3-9183-dffd60bd0984", "FXYTK-NJJ8C-GB6DW-3DYQT-6F7TH" 'Professional Plus
-%ka% "aa66521f-2370-4ad8-a2bb-c095e3e4338f", "2MW9D-N4BXM-9VBPG-Q7W6M-KFBGQ" 'Publisher
-%ka% "1f32a9af-1274-48bd-ba1e-1ab7508a23e8", "HWCXN-K3WBT-WJBKY-R8BD9-XK29P" 'Skype for Business
-%ka% "080a45c5-9f9f-49eb-b4b0-c3c610a5ebd3", "KDX7X-BNVR8-TXXGX-4Q7Y8-78VT3" 'Standard
-%ka% "fb61ac9a-1688-45d2-8f6b-0674dbffa33c", "KNH8D-FGHT4-T8RK3-CTDYJ-K2HT4" 'Visio Professional
-%ka% "72fce797-1884-48dd-a860-b2f6a5efd3ca", "MJVNY-BYWPY-CWV6J-2RKRT-4M8QG" 'Visio Standard
-%ka% "abe28aea-625a-43b1-8e30-225eb8fbd9e5", "TN8H9-M34D3-Y64V9-TR72V-X79KV" 'Word
 echo 'Office 2019
 %ka% "0bc88885-718c-491d-921f-6f214349e79c", "VQ9DP-NVHPH-T9HJC-J9PDT-KTQRG" 'Professional Plus C2R-P
 %ka% "fc7c4d0c-2e85-4bb9-afd4-01ed1476b5e9", "XM2V9-DN9HH-QB449-XDGKC-W2RMW" 'Project Professional C2R-P
@@ -713,7 +674,6 @@ echo www.ddddg.cn
 echo cy2617.jios.org
 echo enter.picp.net 
 )>"%temp%\servers.txt"
-
 setlocal EnableExtensions EnableDelayedExpansion
 for /f "tokens=6 delims=[]. " %%G in ('ver') do set winbuild=%%G
 for /f "usebackq" %%a in ("%temp%\servers.txt") do (
